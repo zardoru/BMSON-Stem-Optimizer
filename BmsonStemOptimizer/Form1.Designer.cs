@@ -41,18 +41,18 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.remapNotesButton = new System.Windows.Forms.Button();
-            this.optimizeAndRemapButton = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.remappingFileTextBox = new System.Windows.Forms.TextBox();
             this.searchRemappingFileButton = new System.Windows.Forms.Button();
             this.epsilonCheckbox = new System.Windows.Forms.CheckBox();
             this.minPlaybackCheckbox = new System.Windows.Forms.CheckBox();
+            this.openRemappingFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.SuspendLayout();
             // 
             // searchBmsonButton
             // 
             this.searchBmsonButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.searchBmsonButton.AutoSize = true;
-            this.searchBmsonButton.Location = new System.Drawing.Point(490, 33);
+            this.searchBmsonButton.Location = new System.Drawing.Point(483, 33);
             this.searchBmsonButton.Name = "searchBmsonButton";
             this.searchBmsonButton.Size = new System.Drawing.Size(75, 23);
             this.searchBmsonButton.TabIndex = 0;
@@ -67,7 +67,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.bmsonTextBox.Location = new System.Drawing.Point(12, 36);
             this.bmsonTextBox.Name = "bmsonTextBox";
-            this.bmsonTextBox.Size = new System.Drawing.Size(472, 20);
+            this.bmsonTextBox.Size = new System.Drawing.Size(465, 20);
             this.bmsonTextBox.TabIndex = 1;
             // 
             // label1
@@ -96,17 +96,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.outputDirTextBox.Location = new System.Drawing.Point(12, 80);
             this.outputDirTextBox.Name = "outputDirTextBox";
-            this.outputDirTextBox.Size = new System.Drawing.Size(472, 20);
+            this.outputDirTextBox.Size = new System.Drawing.Size(465, 20);
             this.outputDirTextBox.TabIndex = 4;
             this.outputDirTextBox.TextChanged += new System.EventHandler(this.outputDirTextBox_TextChanged);
             // 
             // performOptimizationButton
             // 
-            this.performOptimizationButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.performOptimizationButton.Location = new System.Drawing.Point(19, 280);
+            this.performOptimizationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.performOptimizationButton.Location = new System.Drawing.Point(19, 334);
             this.performOptimizationButton.Name = "performOptimizationButton";
-            this.performOptimizationButton.Size = new System.Drawing.Size(225, 28);
+            this.performOptimizationButton.Size = new System.Drawing.Size(223, 28);
             this.performOptimizationButton.TabIndex = 5;
             this.performOptimizationButton.Text = "Optimize";
             this.performOptimizationButton.UseVisualStyleBackColor = true;
@@ -115,7 +114,7 @@
             // searchOutputDirButton
             // 
             this.searchOutputDirButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchOutputDirButton.Location = new System.Drawing.Point(491, 80);
+            this.searchOutputDirButton.Location = new System.Drawing.Point(484, 80);
             this.searchOutputDirButton.Name = "searchOutputDirButton";
             this.searchOutputDirButton.Size = new System.Drawing.Size(75, 23);
             this.searchOutputDirButton.TabIndex = 6;
@@ -133,12 +132,12 @@
             this.messageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.messageBox.Location = new System.Drawing.Point(11, 195);
+            this.messageBox.Location = new System.Drawing.Point(11, 221);
             this.messageBox.Multiline = true;
             this.messageBox.Name = "messageBox";
             this.messageBox.ReadOnly = true;
             this.messageBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.messageBox.Size = new System.Drawing.Size(553, 79);
+            this.messageBox.Size = new System.Drawing.Size(546, 107);
             this.messageBox.TabIndex = 7;
             this.messageBox.WordWrap = false;
             this.messageBox.TextChanged += new System.EventHandler(this.messageBox_TextChanged);
@@ -146,7 +145,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(8, 179);
+            this.label3.Location = new System.Drawing.Point(10, 205);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 8;
@@ -166,51 +165,42 @@
             // remapNotesButton
             // 
             this.remapNotesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remapNotesButton.Location = new System.Drawing.Point(341, 281);
+            this.remapNotesButton.Location = new System.Drawing.Point(350, 335);
             this.remapNotesButton.Name = "remapNotesButton";
-            this.remapNotesButton.Size = new System.Drawing.Size(225, 28);
+            this.remapNotesButton.Size = new System.Drawing.Size(209, 28);
             this.remapNotesButton.TabIndex = 10;
             this.remapNotesButton.Text = "Remap";
             this.remapNotesButton.UseVisualStyleBackColor = true;
-            this.remapNotesButton.Click += new System.EventHandler(this.button1_Click);
+            this.remapNotesButton.Click += new System.EventHandler(this.remapNotesButton_Click);
             // 
-            // optimizeAndRemapButton
+            // remappingFileTextBox
             // 
-            this.optimizeAndRemapButton.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.optimizeAndRemapButton.Location = new System.Drawing.Point(19, 318);
-            this.optimizeAndRemapButton.Name = "optimizeAndRemapButton";
-            this.optimizeAndRemapButton.Size = new System.Drawing.Size(546, 26);
-            this.optimizeAndRemapButton.TabIndex = 11;
-            this.optimizeAndRemapButton.Text = "Optimize AND remap!";
-            this.optimizeAndRemapButton.UseVisualStyleBackColor = true;
-            // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.remappingFileTextBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(12, 127);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(471, 20);
-            this.textBox1.TabIndex = 12;
+            this.remappingFileTextBox.Location = new System.Drawing.Point(12, 127);
+            this.remappingFileTextBox.Name = "remappingFileTextBox";
+            this.remappingFileTextBox.Size = new System.Drawing.Size(464, 20);
+            this.remappingFileTextBox.TabIndex = 12;
             // 
             // searchRemappingFileButton
             // 
             this.searchRemappingFileButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.searchRemappingFileButton.Location = new System.Drawing.Point(490, 127);
+            this.searchRemappingFileButton.Location = new System.Drawing.Point(483, 127);
             this.searchRemappingFileButton.Name = "searchRemappingFileButton";
             this.searchRemappingFileButton.Size = new System.Drawing.Size(75, 23);
             this.searchRemappingFileButton.TabIndex = 13;
             this.searchRemappingFileButton.Text = "Search...";
             this.searchRemappingFileButton.UseVisualStyleBackColor = true;
+            this.searchRemappingFileButton.Click += new System.EventHandler(this.searchRemappingFileButton_Click);
             // 
             // epsilonCheckbox
             // 
+            this.epsilonCheckbox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.epsilonCheckbox.AutoSize = true;
             this.epsilonCheckbox.Checked = true;
             this.epsilonCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.epsilonCheckbox.Location = new System.Drawing.Point(13, 154);
+            this.epsilonCheckbox.Location = new System.Drawing.Point(125, 153);
             this.epsilonCheckbox.Name = "epsilonCheckbox";
             this.epsilonCheckbox.Size = new System.Drawing.Size(299, 17);
             this.epsilonCheckbox.TabIndex = 14;
@@ -220,11 +210,11 @@
             // 
             // minPlaybackCheckbox
             // 
-            this.minPlaybackCheckbox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.minPlaybackCheckbox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.minPlaybackCheckbox.AutoSize = true;
             this.minPlaybackCheckbox.Checked = true;
             this.minPlaybackCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.minPlaybackCheckbox.Location = new System.Drawing.Point(222, 154);
+            this.minPlaybackCheckbox.Location = new System.Drawing.Point(125, 177);
             this.minPlaybackCheckbox.Name = "minPlaybackCheckbox";
             this.minPlaybackCheckbox.Size = new System.Drawing.Size(276, 17);
             this.minPlaybackCheckbox.TabIndex = 15;
@@ -232,16 +222,23 @@
             this.minPlaybackCheckbox.UseVisualStyleBackColor = true;
             this.minPlaybackCheckbox.CheckedChanged += new System.EventHandler(this.minPlaybackCheckbox_CheckedChanged);
             // 
+            // openRemappingFileDialog
+            // 
+            this.openRemappingFileDialog.FileName = "remap.json";
+            this.openRemappingFileDialog.Filter = "Remapping Files|*.json";
+            this.openRemappingFileDialog.Title = "Select remapping file...";
+            this.openRemappingFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
+            // 
             // BsoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(577, 348);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(570, 402);
             this.Controls.Add(this.minPlaybackCheckbox);
             this.Controls.Add(this.epsilonCheckbox);
             this.Controls.Add(this.searchRemappingFileButton);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.optimizeAndRemapButton);
+            this.Controls.Add(this.remappingFileTextBox);
             this.Controls.Add(this.remapNotesButton);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -253,6 +250,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.bmsonTextBox);
             this.Controls.Add(this.searchBmsonButton);
+            this.MinimumSize = new System.Drawing.Size(580, 440);
             this.Name = "BsoForm";
             this.Text = "Bmson Stem Optimizer";
             this.Load += new System.EventHandler(this.BsoForm_Load);
@@ -276,11 +274,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button remapNotesButton;
-        private System.Windows.Forms.Button optimizeAndRemapButton;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox remappingFileTextBox;
         private System.Windows.Forms.Button searchRemappingFileButton;
         private System.Windows.Forms.CheckBox epsilonCheckbox;
         private System.Windows.Forms.CheckBox minPlaybackCheckbox;
+        private System.Windows.Forms.OpenFileDialog openRemappingFileDialog;
     }
 }
 

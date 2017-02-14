@@ -80,35 +80,93 @@ namespace BmsonStemOptimizer
 
         private void performOptimizationButtonn_Click(object sender, EventArgs e)
         {
+            PerformOptimization();
+        }
+
+        private void SetText(TextBox text, string str)
+        {
+            if (text.InvokeRequired)
+                Invoke((Action)(() => { text.Text = str; }));
+            else
+                text.Text = str;
+        }
+
+        private async Task<Dictionary<string, StemTimeMap[]>> PerformOptimization()
+        {
             Logger.Log("Starting optimization process on bmson file {0} to {1}",
                 bmsonTextBox.Text, outputDirTextBox.Text);
 
             try
             {
 
-                BlockButton(optimizeAndRemapButton);
+                //BlockButton(optimizeAndRemapButton);
                 BlockButton(performOptimizationButton);
                 BlockButton(remapNotesButton);
                 string outdir = CheckOutputDir(bmsonTextBox.Text, outputDirTextBox.Text);
 
-                outputDirTextBox.Text = outdir;
+                SetText(outputDirTextBox, outdir);
 
                 var task = StemOptimizer.OptimizeFromBMSON(bmsonTextBox.Text, outdir);
 
-                task.ContinueWith(val =>
+                await task.ContinueWith(val =>
                 {
                     StemOptimizer.WriteNewStemsFromRemappingData(bmsonTextBox.Text, val.Result, outdir);
-                    StemOptimizer.SerializeRemappingDataToJSON(val.Result, outdir + System.IO.Path.DirectorySeparatorChar + "remap.json");
-                    UnblockButton(optimizeAndRemapButton);
+
+                    string remapfile = outdir + Path.DirectorySeparatorChar + "remap.json";
+                    StemOptimizer.SerializeRemappingDataToJSON(val.Result, remapfile);
+
+                    if (remappingFileTextBox.InvokeRequired)
+                    {
+                        Invoke((Action)(() =>
+                        {
+                            remappingFileTextBox.Text = remapfile;
+                        }));
+                    }
+                    else
+                    {
+                        remappingFileTextBox.Text = remapfile;
+                    }
+
+                    //UnblockButton(optimizeAndRemapButton);
                     UnblockButton(performOptimizationButton);
                     UnblockButton(remapNotesButton);
                 });
-            } catch(Exception ex)
+
+                return task.Result;
+            }
+            catch (Exception ex)
             {
                 Logger.Log("An error has ocurred while optimizing: {0}", ex.ToString());
-                MessageBox.Show("An error has ocurred while optimizing stems. Check the log for details.", 
+                MessageBox.Show("An error has ocurred while optimizing stems. Check the log for details.",
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+
+            return null;
+        }
+
+        private void RemapNotes(Dictionary<string, StemTimeMap[]> tmap)
+        {
+            string outdir = CheckOutputDir(bmsonTextBox.Text, outputDirTextBox.Text);
+
+            SetText(outputDirTextBox, outdir);
+
+            Logger.Log("Deserializing remapping data...");
+            var timemap = tmap != null ? tmap : StemOptimizer.DeserializeRemappingDataToJSON(remappingFileTextBox.Text);
+
+            Logger.Log("Remapping notes...");
+            NoteRemapper remap = new NoteRemapper(StemOptimizer.GetBMSONRoot(bmsonTextBox.Text), timemap);
+
+            string write = remap.GetRemappedJSON();
+
+            string file = outputDirTextBox.Text
+                + Path.DirectorySeparatorChar
+                + Path.GetFileName(bmsonTextBox.Text);
+            Logger.Log("Writing bmson to {0}...", file);
+            StreamWriter output = new StreamWriter(file);
+
+            output.WriteLine(write);
+            output.Close();
+            Logger.Log("Done!");
         }
 
         private void UnblockButton(Button btn)
@@ -154,8 +212,10 @@ namespace BmsonStemOptimizer
 
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void remapNotesButton_Click(object sender, EventArgs e)
         {
+            //performOptimizationButtonn_Click(sender, e);
+            RemapNotes(null);
 
         }
 
@@ -172,6 +232,20 @@ namespace BmsonStemOptimizer
         private void minPlaybackCheckbox_CheckedChanged(object sender, EventArgs e)
         {
             StemOptimizer.UseMinimumPlayback = minPlaybackCheckbox.Checked;
+        }
+
+        private void searchRemappingFileButton_Click(object sender, EventArgs e)
+        {
+            DialogResult res = openRemappingFileDialog.ShowDialog();
+            if (res == DialogResult.OK)
+            {
+                remappingFileTextBox.Text = openRemappingFileDialog.FileName;
+            }
+        }
+
+        private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
+        {
+
         }
     }
 }

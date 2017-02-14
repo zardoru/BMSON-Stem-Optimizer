@@ -12,7 +12,7 @@ namespace BmsonStemOptimizer
 {
     public class StemTimeMap
     {
-        public string outputFile;
+        public string file;
         public double originalStart;
         public double originalEnd;
 
@@ -30,7 +30,7 @@ namespace BmsonStemOptimizer
         {
             originalEnd = oe;
             originalStart = os;
-            outputFile = string.Format("{1} - {0}{2}",
+            file = string.Format("{1} - {0}{2}",
                 os,
                 Path.GetFileNameWithoutExtension(inputFile),
                 Path.GetExtension(inputFile));
@@ -140,6 +140,8 @@ namespace BmsonStemOptimizer
                 if (silenceFrames > silenceCutThreshold)
                 {
                     TimeCut tc = new TimeCut((currentFrame - silenceFrames) / sr, (currentFrame) / sr);
+
+                    // TODO: account for stem offset
                     tc.start = timing.SnappedTimeToPulse(tc.start);
                     tc.end = timing.SnappedTimeToPulse(tc.end);
                     silences.Add(tc);
@@ -200,7 +202,7 @@ namespace BmsonStemOptimizer
             return timemap;
         }
 
-        private static JObject GetBMSONRoot(string bmson)
+        public static JObject GetBMSONRoot(string bmson)
         {
             var json_txt = File.ReadAllText(bmson, new UTF8Encoding());
             var root = JObject.Parse(json_txt);
@@ -250,6 +252,15 @@ namespace BmsonStemOptimizer
             string json = JsonConvert.SerializeObject(timemap, Formatting.Indented);
             output.WriteLine(json);
             output.Flush();
+            output.Close();
+
+            Logger.Log("Remap data has been written.");
+        }
+
+        public static Dictionary<string, StemTimeMap[]> DeserializeRemappingDataToJSON(string source)
+        {
+            StreamReader input = new StreamReader(source);
+            return JsonConvert.DeserializeObject<Dictionary<string, StemTimeMap[]>>(input.ReadToEnd());
         }
 
         public static void WriteNewStemsFromRemappingData(string bmson, Dictionary<string, StemTimeMap[]> timemap, string output_dir)
@@ -265,7 +276,7 @@ namespace BmsonStemOptimizer
                     char sep = Path.DirectorySeparatorChar;
                     long startTick = (long)(period.originalStart * 1e7);
                     long endTick = (long)(period.originalEnd * 1e7);
-                    string outfile = output_dir + sep + period.outputFile;
+                    string outfile = output_dir + sep + period.file;
 
                     double len = period.originalEnd - period.originalStart;
                     if ( len < MinPlaybackTime && UseMinimumPlayback)
@@ -286,7 +297,6 @@ namespace BmsonStemOptimizer
                             output.WriteSample(samp);
                     }
 
-                    output.SetLength(reader.WaveFormat.BitsPerSample / 8 * reader.Length);
                     output.Close();
                 }
             }
