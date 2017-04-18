@@ -28,7 +28,7 @@ namespace BmsonStemOptimizer
             Logger.Log("@@@ Starting execution");
 
             StemOptimizer.UseLoudEpsilon = epsilonCheckbox.Checked;
-            StemOptimizer.UseMinimumPlayback = minPlaybackCheckbox.Checked;
+            StemOptimizer.UseMinimumPlayback = true;
 
             Logger.OnLogEvent += (ev) =>
             {
@@ -231,7 +231,7 @@ namespace BmsonStemOptimizer
 
         private void minPlaybackCheckbox_CheckedChanged(object sender, EventArgs e)
         {
-            StemOptimizer.UseMinimumPlayback = minPlaybackCheckbox.Checked;
+            // StemOptimizer.UseMinimumPlayback = minPlaybackCheckbox.Checked;
         }
 
         private void searchRemappingFileButton_Click(object sender, EventArgs e)
@@ -246,6 +246,28 @@ namespace BmsonStemOptimizer
         private void openFileDialog1_FileOk(object sender, CancelEventArgs e)
         {
 
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            lblPlaybackTime.Text = string.Format("{0}ms", tbMinPlayback.Value);
+            StemOptimizer.MinPlaybackTime = tbMinPlayback.Value / 1000.0;
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar1_Scroll_1(object sender, EventArgs e)
+        {
+            lblSilencePeriod.Text = string.Format("{0}ms", tbMinSilence.Value);
+            StemOptimizer.MinSilenceTime = tbMinSilence.Value / 1000.0;
         }
     }
 }

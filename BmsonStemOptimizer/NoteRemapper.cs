@@ -1,40 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 
 namespace BmsonStemOptimizer
 {
-    struct Note
-    {
-        public ulong x;
-        public ulong y;
-        public bool c;
-        public ulong l; // will go unchanged.
-        public Note(ulong x, ulong y, bool c, ulong l)
-        {
-            this.x = x;
-            this.y = y;
-            this.c = c;
-            this.l = l;
-        }
-    }
-
-    
-
-    class SoundChannel
-    {
-        public string name;
-        public Note[] notes;
-
-        public SoundChannel(string name, Note[] notes)
-        {
-            this.name = name;
-            this.notes = notes;
-        }
-    }
+   
 
     class NoteRemapper
     {
@@ -48,15 +19,17 @@ namespace BmsonStemOptimizer
             }
         }
 
-        private List<SoundChannel> StemNotes;
         private Dictionary<string, StemTimeMap[]> OptimizedStems;
 
+        private List<SoundChannel> StemNotes;
         private List<SoundChannel> NewStemNotes;
         
         
         private Dictionary<string, bool> MappedOptimizedStems;
         private BmsonTimingData timing;
         private JObject bmsonOutput;
+
+        private BmsonNoteLoader notedata;
 
         private StemTimeMap GetNewStemForNote(string oldstem, Note note, ulong stemoffset)
         {
@@ -197,33 +170,6 @@ namespace BmsonStemOptimizer
             bmsonOutput["sound_channels"] = jchannelarray;
         }
 
-        private void LoadNotes(JObject root)
-        {
-            StemNotes = new List<SoundChannel>();
-            var soundchannels = root["sound_channels"];
-            if (soundchannels == null)
-            {
-                Logger.Log("INFO: sound_channels is null. No notes were loaded.");
-            }
-
-            foreach (var sc in soundchannels)
-            {
-                string stem = (string)sc["name"];
-
-                var notes = new List<Note>();
-                foreach (var note in sc["notes"])
-                {
-                    notes.Add(new Note(
-                        note["x"] != null ? (ulong)note["x"] : 0,
-                        note["y"] != null ? (ulong)note["y"] : 0,
-                        note["c"] != null ? (bool)note["c"] : true,
-                        note["l"] != null ? (ulong)note["l"] : 0));
-                }
-
-                StemNotes.Add(new SoundChannel(stem, notes.ToArray()));
-            }
-        }
-
         public string GetRemappedJSON()
         {
             CopyNotesToNewStems();
@@ -235,9 +181,10 @@ namespace BmsonStemOptimizer
         {
             bmsonOutput = (JObject)root.DeepClone();
             timing = new BmsonTimingData(root);
-            OptimizedStems = timemap;
+            notedata = new BmsonNoteLoader(root);
 
-            LoadNotes(root);
+            StemNotes = notedata.GetNotes();
+            OptimizedStems = timemap;
         }
     }
 }

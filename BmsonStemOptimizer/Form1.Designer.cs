@@ -44,8 +44,15 @@
             this.remappingFileTextBox = new System.Windows.Forms.TextBox();
             this.searchRemappingFileButton = new System.Windows.Forms.Button();
             this.epsilonCheckbox = new System.Windows.Forms.CheckBox();
-            this.minPlaybackCheckbox = new System.Windows.Forms.CheckBox();
             this.openRemappingFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tbMinPlayback = new System.Windows.Forms.TrackBar();
+            this.label5 = new System.Windows.Forms.Label();
+            this.lblPlaybackTime = new System.Windows.Forms.Label();
+            this.tbMinSilence = new System.Windows.Forms.TrackBar();
+            this.label6 = new System.Windows.Forms.Label();
+            this.lblSilencePeriod = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)(this.tbMinPlayback)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbMinSilence)).BeginInit();
             this.SuspendLayout();
             // 
             // searchBmsonButton
@@ -103,7 +110,7 @@
             // performOptimizationButton
             // 
             this.performOptimizationButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.performOptimizationButton.Location = new System.Drawing.Point(19, 334);
+            this.performOptimizationButton.Location = new System.Drawing.Point(19, 425);
             this.performOptimizationButton.Name = "performOptimizationButton";
             this.performOptimizationButton.Size = new System.Drawing.Size(223, 28);
             this.performOptimizationButton.TabIndex = 5;
@@ -132,12 +139,12 @@
             this.messageBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.messageBox.Location = new System.Drawing.Point(11, 221);
+            this.messageBox.Location = new System.Drawing.Point(11, 297);
             this.messageBox.Multiline = true;
             this.messageBox.Name = "messageBox";
             this.messageBox.ReadOnly = true;
             this.messageBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.messageBox.Size = new System.Drawing.Size(546, 107);
+            this.messageBox.Size = new System.Drawing.Size(546, 122);
             this.messageBox.TabIndex = 7;
             this.messageBox.WordWrap = false;
             this.messageBox.TextChanged += new System.EventHandler(this.messageBox_TextChanged);
@@ -145,7 +152,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(10, 205);
+            this.label3.Location = new System.Drawing.Point(12, 281);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 8;
@@ -165,7 +172,7 @@
             // remapNotesButton
             // 
             this.remapNotesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.remapNotesButton.Location = new System.Drawing.Point(350, 335);
+            this.remapNotesButton.Location = new System.Drawing.Point(350, 426);
             this.remapNotesButton.Name = "remapNotesButton";
             this.remapNotesButton.Size = new System.Drawing.Size(209, 28);
             this.remapNotesButton.TabIndex = 10;
@@ -200,27 +207,13 @@
             this.epsilonCheckbox.AutoSize = true;
             this.epsilonCheckbox.Checked = true;
             this.epsilonCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.epsilonCheckbox.Location = new System.Drawing.Point(125, 153);
+            this.epsilonCheckbox.Location = new System.Drawing.Point(12, 155);
             this.epsilonCheckbox.Name = "epsilonCheckbox";
             this.epsilonCheckbox.Size = new System.Drawing.Size(299, 17);
             this.epsilonCheckbox.TabIndex = 14;
             this.epsilonCheckbox.Text = "Use Minimum Loudness (0.01f) instead of absolute silence";
             this.epsilonCheckbox.UseVisualStyleBackColor = true;
             this.epsilonCheckbox.CheckedChanged += new System.EventHandler(this.epsilonCheckbox_CheckedChanged);
-            // 
-            // minPlaybackCheckbox
-            // 
-            this.minPlaybackCheckbox.Anchor = System.Windows.Forms.AnchorStyles.Top;
-            this.minPlaybackCheckbox.AutoSize = true;
-            this.minPlaybackCheckbox.Checked = true;
-            this.minPlaybackCheckbox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.minPlaybackCheckbox.Location = new System.Drawing.Point(125, 177);
-            this.minPlaybackCheckbox.Name = "minPlaybackCheckbox";
-            this.minPlaybackCheckbox.Size = new System.Drawing.Size(276, 17);
-            this.minPlaybackCheckbox.TabIndex = 15;
-            this.minPlaybackCheckbox.Text = "Use minimum playback length to discard files (150ms)";
-            this.minPlaybackCheckbox.UseVisualStyleBackColor = true;
-            this.minPlaybackCheckbox.CheckedChanged += new System.EventHandler(this.minPlaybackCheckbox_CheckedChanged);
             // 
             // openRemappingFileDialog
             // 
@@ -229,13 +222,85 @@
             this.openRemappingFileDialog.Title = "Select remapping file...";
             this.openRemappingFileDialog.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
+            // tbMinPlayback
+            // 
+            this.tbMinPlayback.LargeChange = 25;
+            this.tbMinPlayback.Location = new System.Drawing.Point(125, 178);
+            this.tbMinPlayback.Maximum = 200;
+            this.tbMinPlayback.Minimum = 10;
+            this.tbMinPlayback.Name = "tbMinPlayback";
+            this.tbMinPlayback.Size = new System.Drawing.Size(432, 45);
+            this.tbMinPlayback.SmallChange = 10;
+            this.tbMinPlayback.TabIndex = 16;
+            this.tbMinPlayback.TickFrequency = 10;
+            this.tbMinPlayback.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.tbMinPlayback.Value = 150;
+            this.tbMinPlayback.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 178);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(116, 13);
+            this.label5.TabIndex = 17;
+            this.label5.Text = "Minimum playback time";
+            this.label5.Click += new System.EventHandler(this.label5_Click);
+            // 
+            // lblPlaybackTime
+            // 
+            this.lblPlaybackTime.AutoSize = true;
+            this.lblPlaybackTime.Location = new System.Drawing.Point(90, 191);
+            this.lblPlaybackTime.Name = "lblPlaybackTime";
+            this.lblPlaybackTime.Size = new System.Drawing.Size(38, 13);
+            this.lblPlaybackTime.TabIndex = 18;
+            this.lblPlaybackTime.Text = "150ms";
+            // 
+            // tbMinSilence
+            // 
+            this.tbMinSilence.LargeChange = 100;
+            this.tbMinSilence.Location = new System.Drawing.Point(125, 230);
+            this.tbMinSilence.Maximum = 1000;
+            this.tbMinSilence.Minimum = 100;
+            this.tbMinSilence.Name = "tbMinSilence";
+            this.tbMinSilence.Size = new System.Drawing.Size(432, 45);
+            this.tbMinSilence.SmallChange = 20;
+            this.tbMinSilence.TabIndex = 19;
+            this.tbMinSilence.TickFrequency = 100;
+            this.tbMinSilence.Value = 200;
+            this.tbMinSilence.Scroll += new System.EventHandler(this.trackBar1_Scroll_1);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 230);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(116, 13);
+            this.label6.TabIndex = 20;
+            this.label6.Text = "Minimum silence period";
+            this.label6.Click += new System.EventHandler(this.label6_Click);
+            // 
+            // lblSilencePeriod
+            // 
+            this.lblSilencePeriod.AutoSize = true;
+            this.lblSilencePeriod.Location = new System.Drawing.Point(92, 247);
+            this.lblSilencePeriod.Name = "lblSilencePeriod";
+            this.lblSilencePeriod.Size = new System.Drawing.Size(38, 13);
+            this.lblSilencePeriod.TabIndex = 21;
+            this.lblSilencePeriod.Text = "200ms";
+            // 
             // BsoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(570, 402);
-            this.Controls.Add(this.minPlaybackCheckbox);
+            this.ClientSize = new System.Drawing.Size(570, 493);
+            this.Controls.Add(this.lblSilencePeriod);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.tbMinSilence);
+            this.Controls.Add(this.lblPlaybackTime);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.tbMinPlayback);
             this.Controls.Add(this.epsilonCheckbox);
             this.Controls.Add(this.searchRemappingFileButton);
             this.Controls.Add(this.remappingFileTextBox);
@@ -254,6 +319,8 @@
             this.Name = "BsoForm";
             this.Text = "Bmson Stem Optimizer";
             this.Load += new System.EventHandler(this.BsoForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.tbMinPlayback)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tbMinSilence)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -277,8 +344,13 @@
         private System.Windows.Forms.TextBox remappingFileTextBox;
         private System.Windows.Forms.Button searchRemappingFileButton;
         private System.Windows.Forms.CheckBox epsilonCheckbox;
-        private System.Windows.Forms.CheckBox minPlaybackCheckbox;
         private System.Windows.Forms.OpenFileDialog openRemappingFileDialog;
+        private System.Windows.Forms.TrackBar tbMinPlayback;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label lblPlaybackTime;
+        private System.Windows.Forms.TrackBar tbMinSilence;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label lblSilencePeriod;
     }
 }
 

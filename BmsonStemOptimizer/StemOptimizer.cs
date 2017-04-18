@@ -141,9 +141,9 @@ namespace BmsonStemOptimizer
                 {
                     TimeCut tc = new TimeCut((currentFrame - silenceFrames) / sr, (currentFrame) / sr);
 
-                    // TODO: account for stem offset
-                    tc.start = timing.SnappedTimeToPulse(tc.start);
-                    tc.end = timing.SnappedTimeToPulse(tc.end);
+                    // TODO: account for stem offset... depends on notes!
+                    tc.start = timing.TimeAtPulse((ulong)Math.Ceiling(timing.PulseAtTime(tc.start)));
+                    tc.end = timing.TimeAtPulse((ulong)Math.Floor(timing.PulseAtTime(tc.end)));
                     silences.Add(tc);
                 }
             };
@@ -178,6 +178,8 @@ namespace BmsonStemOptimizer
 
 
             addCut();
+
+            // Logger.Log("... Removing potential silence periods with note intersections");
 
             string message = "Silence periods found for stem {0}: " + Environment.NewLine;
             foreach(var silence in silences)
@@ -279,7 +281,7 @@ namespace BmsonStemOptimizer
                     string outfile = output_dir + sep + period.file;
 
                     double len = period.originalEnd - period.originalStart;
-                    if ( len < MinPlaybackTime && UseMinimumPlayback)
+                    if ( len < MinPlaybackTime && UseMinimumPlayback )
                     {
                         Logger.Log("Skipping {0} as it is too short ({1} < {2}", outfile, len, MinPlaybackTime);
                         continue;
